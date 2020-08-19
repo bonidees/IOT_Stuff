@@ -47,7 +47,7 @@ BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
 
 // Hardware information.
 #define TIMEOUT  5000                              // Timeout for server response.
-#define SLEEP_TIME_SECONDS 10
+#define SLEEP_TIME_SECONDS 300
 
 // ThingSpeak information.
 float HUMIDITY;
@@ -140,7 +140,7 @@ Serial.println("Function complete, time to rest.");
 
 delay( 200 );
 Serial.println( "Goodnight for " + String( SLEEP_TIME_SECONDS ) + " Seconds" );
-ESP.deepSleep(300*1000);
+ESP.deepSleep(300e6);
 
 //delay(40000);
 
