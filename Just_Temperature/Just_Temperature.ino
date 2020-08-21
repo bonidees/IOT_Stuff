@@ -6,9 +6,9 @@
 * Thingspeak, the IOT platform within Matlab. 
 * 
 * What you need: 
-* A free Thingspeak account. Then a channel. You'll need to input the channel, write and read API codes for this to work. 
+* All inputs are marked as "XXXXX." You'll need a free Thingspeak account. Then a channel. You'll need to input the channel, write and read API codes for this to work. 
 * 
-* Wifi credentials (duh)
+* Wifi credentials (duh) 
 * 
 * An Arduino usable ESP 8266 like the Wemos D1 mini or whatever. 
 * 
@@ -40,8 +40,8 @@ BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
 
 
 // Network information.
-#define WIFI_NAME "Capt. Benson"
-#define PASSWORD "Dick Wolf"
+#define WIFI_NAME "XXXXX"
+#define PASSWORD "XXXXX"
 
 
 
@@ -56,9 +56,9 @@ float TEMPERATURE_F;
 float BAROMETRICp;
 float temp(NAN), hum(NAN), pres(NAN);
 #define THING_SPEAK_ADDRESS "api.thingspeak.com"
-const char * myWriteAPIKey = "0YFYBT33F857WCJF";           // Change this to your channel Write API key.
-const char * myReadAPIKey = "608APDVPFQ58LTC1";
-unsigned long myChannel = 1118897;
+const char * myWriteAPIKey = "XXXXX";           // Change this to your channel Write API key.
+const char * myReadAPIKey = "XXXXX";
+unsigned long myChannel = XXXXX;
 
 #define pump D8
 
@@ -132,7 +132,11 @@ Serial.println(BAROMETRICp);
 ThingSpeak.setField(1, HUMIDITY);
 ThingSpeak.setField(2, TEMPERATURE_C);
 ThingSpeak.setField(3, TEMPERATURE_F);
+//ThingSpeak.setField(4, WHATEVER);
+//ThingSpeak.setField(5, WHATEVER);
+//ThingSpeak.setField(6, WHATEVER);
 ThingSpeak.setField(7, BAROMETRICp);
+//ThingSpeak.setField(8, WHATEVER);
 ThingSpeak.writeFields(myChannel, myWriteAPIKey);
 
 Serial.println("Function complete, time to rest.");
