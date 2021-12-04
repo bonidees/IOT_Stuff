@@ -1,7 +1,7 @@
 
 // Fill-in information from your Blynk Template here
-#define BLYNK_TEMPLATE_ID           "TMPLnhptwnXc"
-#define BLYNK_DEVICE_NAME           "testjuly2021"
+#define BLYNK_TEMPLATE_ID "TMPLnhptwnXc"
+#define BLYNK_DEVICE_NAME "Test FlorA Template"
 
 //added from DHT code
 #define BLYNK_PRINT Serial
@@ -45,7 +45,7 @@ BlynkTimer timer;
 void sendSensor()
 {
   float h = dht.readHumidity();
-  float t = dht.readTemperature(); // or dht.readTemperature(true) for Fahrenheit
+  float t = dht.readTemperature(true); // or dht.readTemperature(true) for Fahrenheit
 
   if (isnan(h) || isnan(t)) {
     Serial.println("Failed to read from DHT sensor!");
