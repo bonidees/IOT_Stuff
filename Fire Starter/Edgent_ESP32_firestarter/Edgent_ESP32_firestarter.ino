@@ -1,40 +1,36 @@
-/*************************************************************
 
-  Blynk using a LED widget on your phone!
-
-  App project setup:
-    LED widget on V1
- *************************************************************/
-
-// Template ID, Device Name and Auth Token are provided by the Blynk.Cloud
-// See the Device Info tab, or Template settings
+// Fill-in information from your Blynk Template here
 #define BLYNK_TEMPLATE_ID "TMPLJmpAUome"
 #define BLYNK_DEVICE_NAME "Fire Starter V1"
-#define BLYNK_AUTH_TOKEN "l-H3RAHApa61uX4pPc1o5HXpnAiuqHrn"
 
-#include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
+#define BLYNK_FIRMWARE_VERSION        "0.1.0"
+
+#define BLYNK_PRINT Serial
+//#define BLYNK_DEBUG
+#define pin_SDA                         21
+#define pin_SCL                         22
+
+#define APP_DEBUG
+
+// Uncomment your board, or configure a custom board in Settings.h
+//#define USE_WROVER_BOARD
+//#define USE_TTGO_T7
+
+#include "BlynkEdgent.h"
 #include <BME280I2C.h>
 #include <Wire.h>
-
-#define SERIAL_BAUD 115200
-
-char auth[] = BLYNK_AUTH_TOKEN;
-
-// Your WiFi credentials.
-// Set password to "" for open networks.
-char ssid[] = "Capt. Benson";
-char pass[] = "Dick Wolf";
 
 BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
                   // Oversampling = pressure ×1, temperature ×1, humidity ×1, filter off,
 
-//////////////////////////////////////////////////////////////////
-
-int LED = D5; 
-WidgetLED led1(V2);
 
 BlynkTimer timer;
+
+//////////////////////////////////////////////////////////////////
+
+/*///////////     Fire Starter Inits     ////////////////////
+int LED = 34; 
+WidgetLED led1(V2);
 
 BLYNK_WRITE(V2) {
   int value = param.asInt(); // Get value as integer
@@ -53,19 +49,17 @@ delay(5000);
 }
 
 
+/////////////////////////////////////////////////////////////////*/
+
+                  
 void setup()
 {
-  Serial.begin(SERIAL_BAUD);
+  
+  Serial.begin(115200);
+  delay(100);
+ Wire.begin();
+  BlynkEdgent.begin();
 
-  while(!Serial) {} // Wait
-
-  Wire.begin();
-  Blynk.begin(auth, ssid, pass);
-  while(!bme.begin())
-  {
-    Serial.println("Could not find BME280 sensor!");
-    delay(1000);
-  }
 
   // bme.chipID(); // Deprecated. See chipModel().
   switch(bme.chipModel())
@@ -79,16 +73,20 @@ void setup()
      default:
        Serial.println("Found UNKNOWN sensor! Error!");
   }
+  
+
+  
 }
 
-//////////////////////////////////////////////////////////////////
-void loop()
-{
-   printBME280Data(&Serial);
+void loop() {
+
+  printBME280Data(&Serial);
    delay(5000);
-   Blynk.run();
-timer.run();
+   
+  BlynkEdgent.run();
+  timer.run();
 }
+
 
 //////////////////////////////////////////////////////////////////
 void printBME280Data
