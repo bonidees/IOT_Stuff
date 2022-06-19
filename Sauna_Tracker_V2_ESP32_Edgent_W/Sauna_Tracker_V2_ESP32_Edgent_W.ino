@@ -45,8 +45,9 @@ void sendSensor()
   Serial.print(h);
 
  Serial.println("Sending Sensor Values to Blynk..." );
-  Blynk.virtualWrite(V1, h);
   Blynk.virtualWrite(V0, t);
+  Blynk.virtualWrite(V1, h);
+ 
 
 
 
