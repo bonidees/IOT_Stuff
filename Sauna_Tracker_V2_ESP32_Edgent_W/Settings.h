@@ -5,12 +5,12 @@
 
 #if defined(USE_WROVER_BOARD)
 
-  #define BOARD_BUTTON_PIN            15
+  #define BOARD_BUTTON_PIN            0
   #define BOARD_BUTTON_ACTIVE_LOW     true
 
-  #define BOARD_LED_PIN_R             0
-  #define BOARD_LED_PIN_G             2
-  #define BOARD_LED_PIN_B             4
+  #define BOARD_LED_PIN_R             25
+  #define BOARD_LED_PIN_G             25
+  #define BOARD_LED_PIN_B             25
   #define BOARD_LED_INVERSE           false
   #define BOARD_LED_BRIGHTNESS        128
 

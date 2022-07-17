@@ -13,6 +13,23 @@
 #define BME280_I2C_ADDRESS 0x76
 
 
+
+// constants won't change. They're used here to set pin numbers for the button:
+const int buttonPin = 23;    // the number of the pushbutton pin
+const int ledPin = 27;      // the number of the LED pin
+// Variables will change:
+int ledState = HIGH;         // the current state of the output pin
+int buttonState;             // the current reading from the input pin
+int lastButtonState = LOW;   // the previous reading from the input pin
+//int lampamasa;
+// the following variables are unsigned longs because the time, measured in
+// milliseconds, will quickly become a bigger number than can be stored in an int.
+unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
+
+
+
+
 #define APP_DEBUG
 
 // Uncomment your board, or configure a custom board in Settings.h
@@ -32,6 +49,7 @@ void sendSensor()
 {
   float t = BME280_sensor.readTempF(); 
   float h = BME280_sensor.readFloatHumidity();
+//float l = lampamasa();
 
   if (isnan(h) || isnan(t)) {
    // Serial.println("Failed to read from BME sensor!");
@@ -43,11 +61,13 @@ void sendSensor()
   Serial.print(t);
   Serial.println("Humidity: ");
   Serial.print(h);
+  Serial.println("Lampamasa: ");
+ // Serial.print(l);
 
  Serial.println("Sending Sensor Values to Blynk..." );
   Blynk.virtualWrite(V0, t);
   Blynk.virtualWrite(V1, h);
- 
+Blynk.virtualWrite(V2, ledState);
 
 
 
@@ -63,7 +83,14 @@ void sendSensor()
 void setup()
 {
   Serial.begin(115200);
-  delay(100);
+//button stuff
+    pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+//lampamasa == 0;
+    digitalWrite(ledPin, ledState);
+// end button stuff
+
+  delay(20);
 
   BlynkEdgent.begin();
   Wire.setPins(pin_SDA, pin_SCL);
@@ -80,9 +107,37 @@ timer.setInterval(60000L, sendSensor);
 
 void loop() {
   BlynkEdgent.run();
+  int reading = digitalRead(buttonPin);
 
+    // If the switch changed, due to noise or pressing:
+  if (reading != lastButtonState) {
+    // reset the debouncing timer
+    lastDebounceTime = millis();
+  }
+    if ((millis() - lastDebounceTime) > debounceDelay) {
+    // whatever the reading is at, it's been there for longer than the debounce
+    // delay, so take it as the actual current state:
+
+    // if the button state has changed:
+    if (reading != buttonState) {
+      buttonState = reading;
+
+      // only toggle the LED if the new button state is HIGH
+      if (buttonState == HIGH) {
+        ledState = !ledState;
+        Serial.print("lampamasa on ");
+//        lampamasa == 1;
+      }   else  
+    //    lampamasa == 0;
+      Serial.print("lampamasa off ");
+    }
+  }
+    digitalWrite(ledPin, ledState);
+      lastButtonState = reading;
+  //end button stuff
    if(Blynk.connected()){
- delay(500);
+ delay(50);
+ 
  Blynk.run();
  timer.run();
  } else  Serial.print("Trying to connect again... ");
