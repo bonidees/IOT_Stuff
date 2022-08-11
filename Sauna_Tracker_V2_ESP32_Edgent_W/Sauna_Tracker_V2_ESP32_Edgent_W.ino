@@ -8,15 +8,15 @@
 #define BLYNK_PRINT Serial
 //#define BLYNK_DEBUG
 
-#define pin_SDA                         21
-#define pin_SCL                         22
+#define pin_SDA                         D2
+#define pin_SCL                         D1
 #define BME280_I2C_ADDRESS 0x76
 
 
 
 // constants won't change. They're used here to set pin numbers for the button:
-const int buttonPin = 23;    // the number of the pushbutton pin
-const int ledPin = 27;      // the number of the LED pin
+const int buttonPin = D4;    // the number of the pushbutton pin
+const int ledPin = D8;      // the number of the LED pin
 // Variables will change:
 int ledState = HIGH;         // the current state of the output pin
 int buttonState;             // the current reading from the input pin
