@@ -48,5 +48,11 @@ def send_to_ifttt():
 def main():
     connect_wifi(SSID, PASSWORD)
     send_to_ifttt()
+    
+# Infinite loop to continuously run main() after 5 minutes sleep
+while True:
+    main()
+    print('Sleeping for 5 minutes...')
+    time.sleep(300)  # sleep for 5 minutes (300 seconds)
 
-main()
+
