@@ -15,6 +15,9 @@ import network
 import urequests
 import urandom
 import time
+import machine
+
+
 
 # Update these with your details
 SSID = 'Capt. Benson'
@@ -22,6 +25,12 @@ PASSWORD = 'Dick Wolf'
 IFTTT_WEBHOOK_URL = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{your_ifttt_key}'
 EVENT_NAME = 'test_event'
 YOUR_IFTTT_KEY = 'cq0GyOhwJUh3cBXk4O0Gm6'
+
+
+#setup LED
+led = machine.Pin("LED", machine.Pin.OUT)
+
+
 
 # Connect to Wi-Fi
 def connect_wifi(ssid, password):
@@ -37,12 +46,15 @@ def connect_wifi(ssid, password):
 
 # Send a random digit to the IFTTT webhook
 def send_to_ifttt():
+    led.on()
     random_digit = str(urandom.randint(0, 9))
     url = IFTTT_WEBHOOK_URL.replace('{event_name}', EVENT_NAME).replace('{your_ifttt_key}', YOUR_IFTTT_KEY)
     data = {"value1": random_digit}
     response = urequests.post(url, json=data)
     print('Random digit sent:', random_digit)
     print('Response:', response.text)
+    led.off()
+
 
 # Main program
 def main():
@@ -54,5 +66,6 @@ while True:
     main()
     print('Sleeping for 5 minutes...')
     time.sleep(300)  # sleep for 5 minutes (300 seconds)
+
 
 
