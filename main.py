@@ -53,7 +53,7 @@ def connect_wifi(ssid, password):
     print('Network connected!')
     print('IP Address:', wlan.ifconfig()[0])
 
-# Send a random digit to the IFTTT webhook
+# Send internal temperature reading to the IFTTT webhook
 def send_to_ifttt():
     led.on()
     # Read raw temperature sensor value
@@ -64,12 +64,11 @@ def send_to_ifttt():
     # With a measurement in millivolts, the temperature in degrees Celsius is calculated as follows:
     temperature = 27 - (reading - 0.706)/0.001721
     
-    #clean this up
-    random_digit = temperature
+    #Send to IFTTT
     url = IFTTT_WEBHOOK_URL.replace('{event_name}', EVENT_NAME).replace('{your_ifttt_key}', YOUR_IFTTT_KEY)
-    data = {"value1": random_digit}
+    data = {"value1": temperature}
     response = urequests.post(url, json=data)
-    print('Random digit sent:', random_digit)
+    print('Random digit sent:', temperature)
     print('Response:', response.text)
     led.off()
 
@@ -97,6 +96,7 @@ while True:
     main()
     print('Sleeping for 5 minutes...')
     time.sleep(300)  # sleep for 5 minutes (300 seconds)
+
 
 
 
