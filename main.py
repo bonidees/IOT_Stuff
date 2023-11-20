@@ -23,6 +23,8 @@ from machine import ADC
 # Update these with your details
 SSID = 'Capt. Benson'
 PASSWORD = 'Dick Wolf'
+
+#IFTTT stuff
 IFTTT_WEBHOOK_URL = 'https://maker.ifttt.com/trigger/{event_name}/with/key/{your_ifttt_key}'
 EVENT_NAME = 'test_event'
 YOUR_IFTTT_KEY = 'cq0GyOhwJUh3cBXk4O0Gm6'
@@ -54,7 +56,16 @@ def connect_wifi(ssid, password):
 # Send a random digit to the IFTTT webhook
 def send_to_ifttt():
     led.on()
-    random_digit = str(urandom.randint(0, 9))
+    # Read raw temperature sensor value
+    reading = sensor_temp.read_u16() * conversion_factor
+    
+    # The raw reading needs to be converted into temperature.
+    # This equation is based on the typical characteristics of the temperature sensor.
+    # With a measurement in millivolts, the temperature in degrees Celsius is calculated as follows:
+    temperature = 27 - (reading - 0.706)/0.001721
+    
+    #clean this up
+    random_digit = temperature
     url = IFTTT_WEBHOOK_URL.replace('{event_name}', EVENT_NAME).replace('{your_ifttt_key}', YOUR_IFTTT_KEY)
     data = {"value1": random_digit}
     response = urequests.post(url, json=data)
