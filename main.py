@@ -16,6 +16,7 @@ import urequests
 import urandom
 import time
 import machine
+from machine import ADC
 
 
 
@@ -30,6 +31,12 @@ YOUR_IFTTT_KEY = 'cq0GyOhwJUh3cBXk4O0Gm6'
 #setup LED
 led = machine.Pin("LED", machine.Pin.OUT)
 
+# The internal temperature sensor is connected to ADC channel 4
+sensor_temp = ADC(4)
+
+# Conversion factor for temperature sensor
+# ADC counts to millivolts: 3.3V / (2^16-1) ADC counts
+conversion_factor = 3.3 / (65535)
 
 
 # Connect to Wi-Fi
@@ -55,10 +62,23 @@ def send_to_ifttt():
     print('Response:', response.text)
     led.off()
 
+def read_temperature():
+    # Read raw temperature sensor value
+    reading = sensor_temp.read_u16() * conversion_factor
+    
+    # The raw reading needs to be converted into temperature.
+    # This equation is based on the typical characteristics of the temperature sensor.
+    # With a measurement in millivolts, the temperature in degrees Celsius is calculated as follows:
+    temperature = 27 - (reading - 0.706)/0.001721
+    
+    # Print temperature
+    print(f"Internal Temperature: {temperature:.2f} C")
+
 
 # Main program
 def main():
     connect_wifi(SSID, PASSWORD)
+    read_temperature()
     send_to_ifttt()
     
 # Infinite loop to continuously run main() after 5 minutes sleep
